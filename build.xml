@@ -1,0 +1,59 @@
+<project name="backup-hadoop-and-hive" default="jar">
+
+  <defaultexcludes remove="**/*~" />
+
+  <!-- ######################################################## -->
+  <!-- change hadoop.lib and hive.lib to your install locations -->
+  <!-- ######################################################## -->
+
+  <property environment="env"/>
+  <property name="hadoop.lib" value="${env.HADOOP_HOME}"/>
+
+  <property name="hive.lib" value="${env.HIVE_HOME}/lib"/>
+
+  <!-- ######################################## -->
+
+  <property name="src.dir" value="com/tripadvisor/hadoop" />
+
+  <property name="build.dir" value="build" />
+
+  <property name="jar.name" value="backup-hadoop-and-hive.jar" />
+
+  <!-- ######################################## -->
+
+  <target name="clean" description="clean the build">
+    <delete dir="${build.dir}" />
+    <delete file="${jar.name}" />
+    <delete>
+      <fileset dir="." includes="**/*~" />
+    </delete>
+  </target>
+
+  <!-- ######################################## -->
+
+  <target name="compile">
+    <mkdir dir="${build.dir}" />
+    <javac srcdir="${src.dir}" destdir="${build.dir}">
+      <classpath>
+        <fileset dir="${hadoop.lib}">
+          <include name="*" />
+        </fileset>
+        <fileset dir="${hive.lib}">
+          <include name="*" />
+        </fileset>
+      </classpath>
+    </javac>
+  </target>
+
+  <!-- ######################################## -->
+
+  <target name="jar" depends="compile">
+    <jar destfile="${jar.name}">
+      <fileset dir="${build.dir}" />
+      <fileset file="README.txt" />
+    </jar>
+  </target>
+
+  <!-- ######################################## -->
+
+</project>
